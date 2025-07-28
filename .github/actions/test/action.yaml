@@ -1,0 +1,11 @@
+name: PHP Unit Tests
+description: Runs PHPUnit tests
+runs:
+  using: "composite"
+  steps:
+    - name: Setup PHP
+      uses: ./.github/actions/setup
+
+    - name: PHPUnit
+      run: ./vendor/bin/phpunit --testdox --configuration phpunit.xml
+      shell: sh

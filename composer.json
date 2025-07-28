@@ -1,0 +1,54 @@
+{
+  "name": "smsbox/php-sdk",
+  "description": "Send SMS message and more from your application with the SMSBOX PHP SDK",
+  "homepage": "https://www.smsbox.net",
+  "version": "1.0.0",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alan Zarli"
+    },
+    {
+      "name": "Farid Touil"
+    }
+  ],
+  "support": {
+    "email": "support@smsbox.fr"
+  },
+  "keywords": [
+    "sms",
+    "smsbox",
+    "sms box",
+    "messaging",
+    "rcs for business",
+    "rcs message",
+    "whatsapp api",
+    "vocal message"
+  ],
+  "require": {
+    "php": ">=7.4",
+    "guzzlehttp/guzzle": "^7.9",
+    "symfony/intl": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Smsbox\\": "src/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6",
+    "phpstan/phpstan": "^1.10",
+    "friendsofphp/php-cs-fixer": "^3.0"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "php-http/discovery": true,
+      "friendsofphp/php-cs-fixer": true
+    },
+    "sort-packages": true
+  },
+  "minimum-stability": "stable"
+}

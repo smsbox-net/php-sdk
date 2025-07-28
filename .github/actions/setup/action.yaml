@@ -1,0 +1,25 @@
+name: PHP Setup
+description: setup the env
+runs:
+  using: "composite"
+  steps:
+    - name: Install system dependencies
+      run: apk add --no-cache curl git unzip shadow jq
+      shell: sh
+
+    - name: Install Composer
+      run: |
+        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      shell: sh
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: composer-${{ hashFiles('composer.lock') }}
+        restore-keys: |
+          composer-
+
+    - name: Install dependencies
+      run: composer install --no-interaction --prefer-dist
+      shell: sh

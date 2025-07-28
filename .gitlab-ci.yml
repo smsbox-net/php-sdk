@@ -1,0 +1,30 @@
+image: php:7.4-alpine
+
+stages:
+  - lint
+  - test
+
+cache:
+  paths:
+    - vendor/
+
+before_script:
+  - apk add --no-cache curl git unzip shadow jq
+  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  - composer install --no-interaction --prefer-dist
+
+php-cs-fixer:
+  stage: lint
+  script:
+    - ./vendor/bin/php-cs-fixer fix --using-cache=no --dry-run --diff --stop-on-violation --config=.php-cs-fixer.php
+
+phpstan:
+  stage: lint
+  script:
+    - ./vendor/bin/phpstan analyse --no-progress --memory-limit 1G -c phpstan.neon
+
+phpunit:
+  stage: test
+  script:
+    - ./vendor/bin/phpunit --testdox --configuration phpunit.xml
+

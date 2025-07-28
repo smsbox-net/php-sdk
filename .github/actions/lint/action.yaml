@@ -1,0 +1,15 @@
+name: PHP Lint
+description: Runs CS Fixer and PHPStan
+runs:
+  using: "composite"
+  steps:
+    - name: Setup PHP
+      uses: ./.github/actions/setup
+
+    - name: PHP-CS-Fixer
+      run: ./vendor/bin/php-cs-fixer fix --using-cache=no --dry-run --diff --stop-on-violation --config=.php-cs-fixer.php
+      shell: sh
+
+    - name: PHPStan
+      run: ./vendor/bin/phpstan analyse --no-progress --memory-limit=1G -c phpstan.neon
+      shell: sh
