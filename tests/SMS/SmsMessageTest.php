@@ -18,8 +18,8 @@ class SmsMessageTest extends TestCase
         $options = $this->createMock(SmsOptions::class);
         $message = new SmsMessage(['+33612345678'], 'Hello World', 'MySender', $options);
 
-        $this->assertSame(['+33612345678'], $message->getPhone());
-        $this->assertSame('Hello World', $message->getSubject());
+        $this->assertSame(['+33612345678'], $message->getPhones());
+        $this->assertSame('Hello World', $message->getContent());
         $this->assertSame('MySender', $message->getFrom());
         $this->assertSame($options, $message->getOptions());
     }
@@ -40,12 +40,12 @@ class SmsMessageTest extends TestCase
         new SmsMessage([], 'Hello');
     }
 
-    public function testSubjectSetter()
+    public function testContentSetter()
     {
         $message = new SmsMessage(['0612345678'], 'Initial');
-        $message->subject('Updated Subject');
+        $message->content('Updated Content');
 
-        $this->assertSame('Updated Subject', $message->getSubject());
+        $this->assertSame('Updated Content', $message->getContent());
     }
 
     public function testFromSetter()
@@ -63,12 +63,6 @@ class SmsMessageTest extends TestCase
         $message->options($options);
 
         $this->assertSame($options, $message->getOptions());
-    }
-
-    public function testGetRecipientIdReturnsPhone()
-    {
-        $message = new SmsMessage(['0612345678'], 'Hello');
-        $this->assertSame(['0612345678'], $message->getRecipientId());
     }
 
     public function testMaxRecipientsCount()

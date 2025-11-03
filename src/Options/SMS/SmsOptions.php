@@ -32,24 +32,12 @@ class SmsOptions
     }
 
     /**
-     * Gets the recipient identifier.
-     *
-     * This method returns the recipient ID if available, or null otherwise.
-     *
-     * @return string|null the recipient ID or null if not set
-     */
-    public function getRecipientId(): ?string
-    {
-        return null;
-    }
-
-    /**
      * Sets the message sending mode.
      *
      * The mode controls the method or channel through which the message is sent.
      * The provided mode must be one of the allowed values returned by {@see Mode::getAll()}.
      *
-     * @param string $mode The mode identifier (e.g., 'standard', 'expert').
+     * @param string $mode The mode identifier (ex.: 'standard', 'expert').
      *
      * @return self
      *
@@ -187,7 +175,7 @@ class SmsOptions
      * Validates the provided ISO code against the list of supported countries.
      * If the `Countries` class exists, the code must be a valid ISO country code.
      *
-     * @param string $isoCode The destination country ISO code (e.g., 'US', 'FR', 'GB').
+     * @param string $isoCode The destination country ISO code (ex.: 'US', 'FR', 'GB').
      *
      * @return self
      *
@@ -251,7 +239,7 @@ class SmsOptions
      * The character set determines how the message content is encoded.
      * The provided charset must be one of the allowed values returned by {@see Charset::getAll()}.
      *
-     * @param string $charset The character set to use (e.g., 'UTF-8', 'ISO-8859-1').
+     * @param string $charset The character set to use (ex.: 'UTF-8', 'ISO-8859-1').
      *
      * @return self
      *

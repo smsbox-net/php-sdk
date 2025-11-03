@@ -2,29 +2,26 @@
 
 namespace Smsbox\Services;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Smsbox\Enum\SMS\Mode;
 use Smsbox\Exception\SmsboxException;
-use Smsbox\Interfaces\SMS\SmsServiceInterface;
+use Smsbox\Http\HttpClientBuilder;
 use Smsbox\Messages\SmsMessage;
-use Smsbox\SmsboxClient;
 
-class SmsService implements SmsServiceInterface
+class SmsService
 {
-    private string $apiKey;
     private ClientInterface $client;
 
     public function __construct(string $apiKey, float $timeout, ?ClientInterface $client = null)
     {
-        $this->apiKey = $apiKey;
-        $this->client = $client ?? new Client([
-            'base_uri'        => 'https://api.smsbox.pro/1.1/api.php',
-            'timeout'         => $timeout,
-            'connect_timeout' => 3,
-        ]);
+        $this->client = HttpClientBuilder::build(
+            'https://api.smsbox.pro/1.1/api.php',
+            $apiKey,
+            $timeout,
+            $client
+        );
     }
 
     /**
@@ -36,15 +33,13 @@ class SmsService implements SmsServiceInterface
      */
     public function send(SmsMessage $message): array
     {
-        $phone   = $this->sanitizePhoneNumbers($message->getPhone());
-        $options = $this->buildOptions($message, $phone);
+        $phones  = $this->sanitizePhoneNumbers($message->getPhones());
+        $options = $this->buildOptions($message, $phones);
 
         try {
             $response = $this->client->request('POST', '', [
                 'headers' => [
-                    'Authorization' => 'App ' . $this->apiKey,
-                    'Content-Type'  => 'application/x-www-form-urlencoded',
-                    'User-Agent'    => 'smsbox-php-sdk/' . SmsboxClient::VERSION,
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
                 'form_params' => $options,
             ]);
@@ -86,15 +81,15 @@ class SmsService implements SmsServiceInterface
      */
     private function sanitizePhoneNumbers(array $phones): array
     {
-        return array_map(function ($phone) {
-            if (!is_string($phone)) {
+        return array_map(function ($phones) {
+            if (!is_string($phones)) {
                 throw new SmsboxException('Phone must be a string.');
             }
 
-            $clean = (string) preg_replace('/[^0-9+]/', '', $phone);
+            $clean = (string) preg_replace('/[^0-9+]/', '', $phones);
 
             if (!preg_match('/^\+?[0-9]{7,14}$/', $clean)) {
-                throw new SmsboxException("Invalid phone: '{$phone}'");
+                throw new SmsboxException("Invalid phone: '{$phones}'");
             }
 
             return $clean;
@@ -103,17 +98,17 @@ class SmsService implements SmsServiceInterface
 
     /**
      * @param SmsMessage    $message
-     * @param array<string> $phone
+     * @param array<string> $phones
      *
      * @return array<string, mixed>
      *
      * @throws SmsboxException
      */
-    private function buildOptions(SmsMessage $message, array $phone): array
+    private function buildOptions(SmsMessage $message, array $phones): array
     {
         $base = [
-            'dest'  => implode(',', $phone),
-            'msg'   => $message->getSubject(),
+            'dest'  => implode(',', $phones),
+            'msg'   => $message->getContent(),
             'id'    => 1,
             'usage' => 'php-sdk',
         ];

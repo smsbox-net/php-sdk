@@ -5,11 +5,10 @@ namespace Smsbox;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Smsbox\Exception\SmsboxException;
-use Smsbox\Interfaces\SMS\SmsboxClientInterface;
 use Smsbox\Messages\SmsMessage;
 use Smsbox\Services\SmsService;
 
-class SmsboxClient implements SmsboxClientInterface
+class SmsboxClient
 {
     /**
      * @var SmsService

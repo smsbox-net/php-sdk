@@ -3,20 +3,20 @@
 namespace Smsbox\Messages;
 
 use Smsbox\Exception\SmsboxException;
-use Smsbox\Interfaces\SMS\SmsMessageInterface;
+use Smsbox\Interfaces\MessageInterface;
 use Smsbox\Options\SMS\SmsOptions;
 
-class SmsMessage implements SmsMessageInterface
+class SmsMessage implements MessageInterface
 {
     /**
      * @var array<string>
      */
-    private array $phone;
+    private array $phones;
 
     /**
      * @var string
      */
-    private string $subject;
+    private string $content;
 
     /**
      * @var string
@@ -31,53 +31,39 @@ class SmsMessage implements SmsMessageInterface
     /**
      * Constructor for the SMS message.
      *
-     * @param array<string>   $phone   Array of recipient phone numbers in international format (e.g., +336XXXXXXXX)
-     * @param string          $subject The message content to be sent
+     * @param array<string>   $phones  Array of recipient phone numbers in international format (ex.: +336XXXXXXXX)
+     * @param string          $content The message content to be sent
      * @param string          $from    Optional sender ID (customizable). **Only supported when using SmsOptions with mode set to EXPERT**. Defaults to empty string.
      * @param SmsOptions|null $options Optional SMS options like strategy, scheduled date/time, mode, etc
      *
      * @throws SmsboxException If the SMS message cannot be created or options are invalid
      */
-    public function __construct(array $phone, string $subject, string $from = '', ?SmsOptions $options = null)
+    public function __construct(array $phones, string $content, string $from = '', ?SmsOptions $options = null)
     {
-        if (empty($phone)) {
-            throw new SmsboxException('Phone numbers cannot be empty.');
-        }
-
-        if (count($phone) > 500) {
-            throw new SmsboxException('The number of phone numbers cannot exceed 500 recipients.');
-        }
-
-        $this->phone   = $phone;
-        $this->subject = $subject;
+        $this->phones  = $phones;
+        $this->content = $content;
         $this->from    = $from;
         $this->options = $options;
+
+        $this->validate();
     }
 
     /**
      * @return array<string>
      */
-    public function getPhone(): array
+    public function getPhones(): array
     {
-        return $this->phone;
+        return $this->phones;
     }
 
     /**
-     * @return array<string>
-     */
-    public function getRecipientId(): array
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @param string $subject
+     * @param string $content
      *
      * @return SmsMessage
      */
-    public function subject(string $subject): self
+    public function content(string $content): self
     {
-        $this->subject = $subject;
+        $this->content = $content;
 
         return $this;
     }
@@ -85,9 +71,9 @@ class SmsMessage implements SmsMessageInterface
     /**
      * @return string
      */
-    public function getSubject(): string
+    public function getContent(): string
     {
-        return $this->subject;
+        return $this->content;
     }
 
     /**
@@ -128,5 +114,24 @@ class SmsMessage implements SmsMessageInterface
     public function getOptions(): ?object
     {
         return $this->options;
+    }
+
+    /**
+     * Validate the message before sending.
+     *
+     * Implementation of MessageInterface.
+     * Validates that phone numbers are not empty and within the 500 recipient limit.
+     *
+     * @throws SmsboxException If validation fails
+     */
+    public function validate(): void
+    {
+        if (empty($this->phones)) {
+            throw new SmsboxException('Phone numbers cannot be empty.');
+        }
+
+        if (count($this->phones) > 500) {
+            throw new SmsboxException('The number of phone numbers cannot exceed 500 recipients.');
+        }
     }
 }

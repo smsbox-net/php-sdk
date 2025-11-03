@@ -20,8 +20,8 @@ class SmsServiceTest extends TestCase
     {
         $message = $this->createMock(SmsMessage::class);
         $message->method('getOptions')->willReturn(null);
-        $message->method('getPhone')->willReturn(['+0600000000']);
-        $message->method('getSubject')->willReturn('Hello');
+        $message->method('getPhones')->willReturn(['+0600000000']);
+        $message->method('getContent')->willReturn('Hello');
 
         $mockResponse = new Response(200, [], 'OK 12345678');
 
@@ -51,8 +51,8 @@ class SmsServiceTest extends TestCase
 
         $message = $this->createMock(SmsMessage::class);
         $message->method('getOptions')->willReturn(null);
-        $message->method('getPhone')->willReturn(['+0600000000']);
-        $message->method('getSubject')->willReturn('Hello');
+        $message->method('getPhones')->willReturn(['+0600000000']);
+        $message->method('getContent')->willReturn('Hello');
 
         $mockResponse = new Response(200, [], 'ERROR 02');
 
@@ -85,8 +85,8 @@ class SmsServiceTest extends TestCase
 
         $message = $this->createMock(SmsMessage::class);
         $message->method('getOptions')->willReturn($options);
-        $message->method('getPhone')->willReturn(['+0600000000']);
-        $message->method('getSubject')->willReturn('Hello %1% %2%');
+        $message->method('getPhones')->willReturn(['+0600000000']);
+        $message->method('getContent')->willReturn('Hello %1% %2%');
 
         $client     = $this->createMock(ClientInterface::class);
         $smsService = new SmsService('pub-xxxxxxxxxxx', 100, $client);
@@ -98,8 +98,8 @@ class SmsServiceTest extends TestCase
     {
         $message = $this->createMock(SmsMessage::class);
         $message->method('getOptions')->willReturn(null);
-        $message->method('getPhone')->willReturn(['+33612345678']);
-        $message->method('getSubject')->willReturn('This is a test');
+        $message->method('getPhones')->willReturn(['+33612345678']);
+        $message->method('getContent')->willReturn('This is a test');
 
         $request   = new Request('POST', '');
         $exception = new \GuzzleHttp\Exception\RequestException(
