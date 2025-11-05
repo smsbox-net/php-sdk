@@ -16,11 +16,10 @@ class SmsMessageTest extends TestCase
     public function testConstructorSetsValues()
     {
         $options = $this->createMock(SmsOptions::class);
-        $message = new SmsMessage(['+33612345678'], 'Hello World', 'MySender', $options);
+        $message = new SmsMessage(['+33612345678'], 'Hello World', $options);
 
         $this->assertSame(['+33612345678'], $message->getPhones());
         $this->assertSame('Hello World', $message->getContent());
-        $this->assertSame('MySender', $message->getFrom());
         $this->assertSame($options, $message->getOptions());
     }
 
@@ -46,14 +45,6 @@ class SmsMessageTest extends TestCase
         $message->content('Updated Content');
 
         $this->assertSame('Updated Content', $message->getContent());
-    }
-
-    public function testFromSetter()
-    {
-        $message = new SmsMessage(['0612345678'], 'Hello');
-        $message->from('SMSBOX');
-
-        $this->assertSame('SMSBOX', $message->getFrom());
     }
 
     public function testOptionsSetter()

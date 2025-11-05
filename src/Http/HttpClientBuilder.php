@@ -4,6 +4,7 @@ namespace Smsbox\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use Smsbox\Exception\SmsboxException;
 use Smsbox\SmsboxClient;
 
 /**
@@ -28,6 +29,8 @@ class HttpClientBuilder
      * @param ClientInterface|null $client  Optional pre-configured client to use instead
      *
      * @return ClientInterface The configured HTTP client
+     *
+     * @throws SmsboxException
      */
     public static function build(
         string $baseUri,
@@ -35,6 +38,11 @@ class HttpClientBuilder
         float $timeout = 10.0,
         ?ClientInterface $client = null
     ): ClientInterface {
+
+        if ($apiKey == '') {
+            throw new SmsboxException('API key is required.');
+        }
+
         if ($client !== null) {
             return $client;
         }

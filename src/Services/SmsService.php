@@ -125,7 +125,7 @@ class SmsService
             $base    = array_merge($base, $options);
 
             $base['mode'] ??= 'Standard';
-            $base['strategy'] ??= 1;
+            $base['strategy'] ??= 4;
 
             if ($base['mode'] === Mode::EXPERT) {
                 $base['origine'] = $base['sender'] ?? '';

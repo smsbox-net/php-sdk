@@ -487,6 +487,10 @@ class SmsOptions
      */
     public function sender(string $sender): self
     {
+        if (strlen($sender) > 11) {
+            throw new SmsboxException('The sender must be less than 11 characters.');
+        }
+
         $this->options['sender'] = $sender;
 
         return $this;

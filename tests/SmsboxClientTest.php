@@ -3,6 +3,7 @@
 namespace Smsbox\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Smsbox\Exception\SmsboxException;
 use Smsbox\Messages\SmsMessage;
 use Smsbox\Services\SmsService;
 use Smsbox\SmsboxClient;
@@ -40,5 +41,13 @@ class SmsboxClientTest extends TestCase
         $result = $client->sendSms($message);
 
         $this->assertSame($expectedResult, $result);
+    }
+
+    public function testCreateClientWithoutKey()
+    {
+        $this->expectException(SmsboxException::class);
+        $this->expectExceptionMessage('API key is required.');
+
+        new SmsboxClient('');
     }
 }

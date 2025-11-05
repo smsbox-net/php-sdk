@@ -19,11 +19,6 @@ class SmsMessage implements MessageInterface
     private string $content;
 
     /**
-     * @var string
-     */
-    private string $from;
-
-    /**
      * @var SmsOptions|null
      */
     private $options;
@@ -33,16 +28,14 @@ class SmsMessage implements MessageInterface
      *
      * @param array<string>   $phones  Array of recipient phone numbers in international format (ex.: +336XXXXXXXX)
      * @param string          $content The message content to be sent
-     * @param string          $from    Optional sender ID (customizable). **Only supported when using SmsOptions with mode set to EXPERT**. Defaults to empty string.
      * @param SmsOptions|null $options Optional SMS options like strategy, scheduled date/time, mode, etc
      *
      * @throws SmsboxException If the SMS message cannot be created or options are invalid
      */
-    public function __construct(array $phones, string $content, string $from = '', ?SmsOptions $options = null)
+    public function __construct(array $phones, string $content, ?SmsOptions $options = null)
     {
         $this->phones  = $phones;
         $this->content = $content;
-        $this->from    = $from;
         $this->options = $options;
 
         $this->validate();
@@ -74,26 +67,6 @@ class SmsMessage implements MessageInterface
     public function getContent(): string
     {
         return $this->content;
-    }
-
-    /**
-     * @param string $from
-     *
-     * @return SmsMessage
-     */
-    public function from(string $from): self
-    {
-        $this->from = $from;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFrom(): string
-    {
-        return $this->from;
     }
 
     /**
@@ -132,6 +105,10 @@ class SmsMessage implements MessageInterface
 
         if (count($this->phones) > 500) {
             throw new SmsboxException('The number of phone numbers cannot exceed 500 recipients.');
+        }
+
+        if (strlen($this->content) < 1) {
+            throw new SmsboxException('Your message should have a content.');
         }
     }
 }
