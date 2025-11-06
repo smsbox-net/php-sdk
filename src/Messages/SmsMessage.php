@@ -5,6 +5,7 @@ namespace Smsbox\Messages;
 use Smsbox\Exception\SmsboxException;
 use Smsbox\Interfaces\MessageInterface;
 use Smsbox\Options\SMS\SmsOptions;
+use Smsbox\Validation\PhoneValidator;
 
 class SmsMessage implements MessageInterface
 {
@@ -106,6 +107,8 @@ class SmsMessage implements MessageInterface
         if (count($this->phones) > 500) {
             throw new SmsboxException('The number of phone numbers cannot exceed 500 recipients.');
         }
+
+        $this->phones = PhoneValidator::sanitizePhoneNumbers($this->phones);
 
         if (strlen($this->content) < 1) {
             throw new SmsboxException('Your message should have a content.');

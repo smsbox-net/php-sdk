@@ -33,7 +33,7 @@ class SmsService
      */
     public function send(SmsMessage $message): array
     {
-        $phones  = $this->sanitizePhoneNumbers($message->getPhones());
+        $phones  = $message->getPhones();
         $options = $this->buildOptions($message, $phones);
 
         try {
@@ -70,30 +70,6 @@ class SmsService
             'code'  => $code,
             'refId' => explode(',', $match[1]),
         ];
-    }
-
-    /**
-     * @param array<string> $phones
-     *
-     * @return array<string>
-     *
-     * @throws SmsboxException
-     */
-    private function sanitizePhoneNumbers(array $phones): array
-    {
-        return array_map(function ($phones) {
-            if (!is_string($phones)) {
-                throw new SmsboxException('Phone must be a string.');
-            }
-
-            $clean = (string) preg_replace('/[^0-9+]/', '', $phones);
-
-            if (!preg_match('/^\+?[0-9]{7,14}$/', $clean)) {
-                throw new SmsboxException("Invalid phone: '{$phones}'");
-            }
-
-            return $clean;
-        }, $phones);
     }
 
     /**
