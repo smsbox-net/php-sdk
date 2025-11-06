@@ -2,7 +2,6 @@
   "name": "smsbox/php-sdk",
   "description": "Send SMS message and more from your application with the SMSBOX PHP SDK",
   "homepage": "https://www.smsbox.net",
-  "version": "1.0.0",
   "type": "library",
   "license": "MIT",
   "authors": [

@@ -18,7 +18,7 @@ class SmsboxClient
     /**
      * @var string
      */
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.1.0';
 
     /**
      * @param string               $apiKey  API key provided by SMSBOX
